@@ -38,14 +38,14 @@ for (const file of slashFiles) {
 
 //generates url to deploy commands
 if (LOAD_SLASH) {
-    const rest = new REST({version: 9}).setToken(TOKEN)
-    console.log("deploying slash commands")
-    rest.put (Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), {body: commands})
-    .then (() => {
-        console.log("succesfully loaded!")
+    const rest = new REST({ version: "9" }).setToken(TOKEN)
+    console.log("Deploying slash commands")
+    rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), {body: commands})
+    .then(() => {
+        console.log("Successfully loaded")
         process.exit(0)
-    }) 
-    .catch (err => {
+    })
+    .catch((err) => {
         if (err){
             console.log(err)
             process.exit(1)
@@ -53,20 +53,25 @@ if (LOAD_SLASH) {
     })
 }
 else {
-    client.on ("ready", () => {
-        console.log ('logged in as ${client.user.tag}') }
+    client.on("ready", () => {
+        console.log(`Logged in as ${client.user.tag}`)
     })
-    client.on ("interactionCreate", (interaction) => {
+    client.on("interactionCreate", (interaction) => {
         async function handleCommand() {
             if (!interaction.isCommand()) return
+
             const slashcmd = client.slashcommands.get(interaction.commandName)
-            if (!slashcmd) interaction.reply ("unknown command")
-            // this lets discord know your bot is thinking so it does not cancel your command
+            if (!slashcmd) interaction.reply("Not a valid slash command")
 
             await interaction.deferReply()
-            // this is where the command is actually executed
-            
+            await slashcmd.run({ client, interaction })
+        }
+        handleCommand()
+    })
+    client.login(TOKEN)
+}
 
+ 
 
 
 
