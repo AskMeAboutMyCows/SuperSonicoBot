@@ -52,6 +52,24 @@ if (LOAD_SLASH) {
         }
     })
 }
+else {
+    client.on ("ready", () => {
+        console.log ('logged in as ${client.user.tag}') }
+    })
+    client.on ("interactionCreate", (interaction) => {
+        async function handleCommand() {
+            if (!interaction.isCommand()) return
+            const slashcmd = client.slashcommands.get(interaction.commandName)
+            if (!slashcmd) interaction.reply ("unknown command")
+            // this lets discord know your bot is thinking so it does not cancel your command
+
+            await interaction.deferReply()
+            // this is where the command is actually executed
+            
+
+
+
+
 
 // curly brace languages are something 
 
